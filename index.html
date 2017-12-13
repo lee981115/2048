@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #board2048{
+            margin: 30px;
+            text-align: center;
+        }
+        body{
+            text-align: center;
+            font-size: 30px;
+        }
+        button{
+            width: 100px;
+            height: 100px;
+            margin-right: 50px;
+            padding: 10px;
+        }
+        span{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            padding: 50px;
+            border: 1px solid gray;
+            background-color: rgb(100,100,120);
+            color: white;
+            
+        }
+    </style>
+</head>
+<body>
+    <p id="timmer"></p>
+    <div id="borad2048"></div>
+    <br>
+    <button onclick = "aaaaa()">LEFT</button>
+    <button onclick = "bbbbb()">UP</button>
+    <button onclick = "ccccc()">RIGHT</button>
+    <button onclick = "ddddd()">DOWN</button>
+    <script>
+    var board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    const blockValue = [2048,1024,512,256,128,64,32,16,8,4,2];
+    var secCnt = 0;
+    function aaaaa()
+    {
+        moveNumberLeft();
+        chackGameOver();
+        chackGameCleare();
+        insertNewNumber();
+        drawBoard();
+    }
+    function bbbbb()
+    {
+        moveNumberUp();
+        chackGameOver();
+        chackGameCleare();
+        insertNewNumber();
+        drawBoard();
+    }
+    function ccccc()
+    {
+        moveNumberRight();
+        chackGameOver();
+        chackGameCleare();
+        insertNewNumber();
+        drawBoard();
+    }
+    function ddddd()
+    {
+        moveNumberDown();
+        chackGameOver();
+        chackGameCleare();
+        insertNewNumber();
+        drawBoard();
+    }
+    function moveNumberLeft(){
+        for(var blockNum = 1;blockNum < blockValue.length;blockNum++){
+            for(var i=0;i<4;i++){
+                for(var j=1;j<4;j++){
+                    if(board[i][j] != 0){
+                        if(board[i][j-1]==0){
+                            board[i][j-1] = board[i][j];
+                            board[i][j] = 0;
+                            if(j!=1)j-=2;
+                        }
+                        else if((board[i][j-1] == blockValue[blockNum]) && (board[i][j] == blockValue[blockNum])){
+                            board[i][j-1] = blockValue[blockNum-1];
+                            board[i][j] = 0;
+                            if(j!=1)j-=2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function moveNumberUp(){
+        for(var blockNum = 1;blockNum < blockValue.length;blockNum++){
+            for(var j=0;j<4;j++){
+                for(var i=1;i<4;i++){
+
+                    if(board[i][j] != 0){
+                        if(board[i-1][j]==0){
+                            board[i-1][j] = board[i][j];
+                            board[i][j] = 0;
+                            if(i!=1)i-=2;
+                        }
+                        else if((board[i-1][j] == blockValue[blockNum]) && (board[i][j] == blockValue[blockNum])){
+                            board[i-1][j] = blockValue[blockNum-1];
+                            board[i][j] = 0;
+                            if(i!=1)i-=2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function moveNumberRight(){
+        for(var blockNum = 1;blockNum < blockValue.length;blockNum++){
+            for(var i=0;i<4;i++){
+                for(var j=2;j>=0;j--){
+                    if(board[i][j] != 0){
+                        if(board[i][j+1]==0){
+                            board[i][j+1] = board[i][j];
+                            board[i][j] = 0;
+                            if(j!=2)j+=2;
+                        }
+                        else if((board[i][j+1] == blockValue[blockNum]) && (board[i][j] == blockValue[blockNum])){
+                            board[i][j+1] = blockValue[blockNum-1];
+                            board[i][j] = 0;
+                            if(j!=2)j+=2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function moveNumberDown(){
+        for(var blockNum = 1;blockNum < blockValue.length;blockNum++){
+            for(var j=0;j<4;j++){
+                for(var i=2;i>=0;i--){
+                    if(board[i][j] != 0){
+                        if(board[i+1][j]==0){
+                            board[i+1][j] = board[i][j];
+                            board[i][j] = 0;
+                            if(i!=2)i+=2;
+                        }
+                        else if((board[i+1][j] == blockValue[blockNum]) && (board[i][j] == blockValue[blockNum])){
+                            board[i+1][j] = blockValue[blockNum-1];
+                            board[i][j] = 0;
+                            if(i!=2)i+=2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function getRandom(){
+        return Math.floor(Math.random()*4);
+    }
+    function gameOver()
+    {
+        board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+        secCnt = 0;
+        alert("GAME OVER");
+        //insertNewNumber();
+    }
+    function chackGameOver()
+    {
+        for(var i=0;i<4;i++){
+            for(var j=0;j<4;j++){
+                if(board[i][j] == 0)return 0;
+            }
+        }
+        gameOver();
+        return 1;
+    }
+    function gameCleare()
+    {
+        board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+        alert("GAME CLEARE");
+        alert("Yours cleare time is " + secToTime(secCnt));
+        secCnt = 0;
+    }
+    function chackGameCleare()
+    {
+        for(var i=0;i<4;i++){
+            for(var j=0;j<4;j++){
+                if(board[i][j] == blockValue[0])
+                {
+                    gameCleare();
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    function insertNewNumber()
+    {
+        var x=getRandom(),y=getRandom();
+        while(board[y][x] != 0)
+        {
+            x = getRandom();
+            y = getRandom();
+        }
+        board[y][x] = 2;
+    }
+    function drawBoard()
+    {
+        document.getElementById("borad2048").innerHTML ="";
+        for(var i=0;i<4;i++){
+            for(var j=0;j<4;j++){
+                document.getElementById("borad2048").innerHTML += '<span>'+board[i][j] +'</span>'; 
+            }
+            document.getElementById("borad2048").innerHTML += "<br>";
+        }
+    }
+
+    function keyPress(e){
+        var key=e.keyCode;
+        console.log(key);
+        switch(key){
+            case  38: bbbbb();break; //w
+            case 40 : ddddd();break; //s
+            case 37 : aaaaa();break;  //a
+            case 39 : ccccc();break; //d
+            default : break; //default
+        }
+    }
+    function secToTime(sec)
+    {
+        var min = Math.floor(sec/60);
+        var sec = (sec%60);
+        return  ((min !=0 )?min+ " : " : "") + sec;
+    }
+    insertNewNumber();
+    drawBoard();
+    setInterval(function(){
+        secCnt++;
+        document.getElementById("timmer").innerHTML = "TIME<br>"+secToTime(secCnt);
+    },1000);
+    document.getElementsByTagName("body")[0].addEventListener("keydown",keyPress);  
+    </script>
+</body>
+</html>
